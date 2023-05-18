@@ -6,17 +6,25 @@ import DraggableGrid from 'react-native-draggable-grid';
 const DraggableBlocks = ({ onArrayGenerated }) => {
   const [items, setItems] = useState([
     { key: 'move_forward', name: 'Mover para frente', data: { steps: 1 } },
-    { key: 'if_block', name: 'Se', data: { condition: 'sensor', children: [] } },
+    { key: 'if_block', name: 'Se', data: { condition: 'sensor', childrenTrue: [], childrenFalse: [] } },
     // Adicione outros blocos personalizados aqui.
   ]);
 
-  const handleAddChild = (parentIndex) => {
+  const handleAddChild = (parentIndex, condition) => {
     const newItems = [...items];
-    newItems[parentIndex].data.children.push({
-      key: 'move_forward',
-      name: 'Mover para frente',
-      data: { steps: 1 },
-    });
+    if(condition === 'true') {
+      newItems[parentIndex].data.childrenTrue.push({
+        key: 'move_forward',
+        name: 'Mover para frente',
+        data: { steps: 1 },
+      });
+    } else {
+      newItems[parentIndex].data.childrenFalse.push({
+        key: 'move_forward',
+        name: 'Mover para frente',
+        data: { steps: 1 },
+      })
+    }
     setItems(newItems);
     onArrayGenerated(newItems);
   };
@@ -37,11 +45,19 @@ const DraggableBlocks = ({ onArrayGenerated }) => {
       {item.key === 'if_block' && (
         <>
           <Text>Condição: {item.data.condition}</Text>
-          <TouchableOpacity onPress={() => handleAddChild(order)} style={{ marginTop: 10 }}>
-            <Text style={{ color: 'blue' }}>Adicionar bloco</Text>
+          <TouchableOpacity onPress={() => handleAddChild(order, "true")} style={{ marginTop: 10 }}>
+            <Text style={{ color: 'blue' }}>Adicionar condicoes true</Text>
           </TouchableOpacity>
-          {item.data.children.map((child, index) => (
+          <TouchableOpacity onPress={() => handleAddChild(order, "false")} style={{ marginTop: 10 }}>
+            <Text style={{ color: 'red' }}>Adicionar condicoes false</Text>
+          </TouchableOpacity>
+          {item.data.childrenTrue.map((child, index) => (
             <View key={index} style={{ backgroundColor: 'lightgray', marginTop: 5, borderRadius: 5 }}>
+              <Text style={{ padding: 5 }}>{child.name}</Text>
+            </View>
+          ))}
+          {item.data.childrenFalse.map((child, index) => (
+            <View key={index} style={{ backgroundColor: 'lightred', marginTop: 5, borderRadius: 5 }}>
               <Text style={{ padding: 5 }}>{child.name}</Text>
             </View>
           ))}
@@ -66,4 +82,4 @@ const DraggableBlocks = ({ onArrayGenerated }) => {
   );
 };
 
-export default DraggableBlocks;
+export default DraggableBlocks

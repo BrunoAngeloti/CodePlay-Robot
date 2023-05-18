@@ -9,9 +9,8 @@ const blocksToArray = (blocks) => {
             array.push({ action: 'move_forward', steps: block.data.steps });
             break;
           case 'if_block':
-            array.push({ action: 'if', condition: block.data.condition });
-            parseBlocks(block.data.children);
-            array.push({ action: 'end_if' });
+            array.push({ action: 'if', condition: block.data.condition, blocksTrue: blocksToArray(block.data.childrenTrue), blocksFalse: blocksToArray(block.data.childrenFalse) });
+            console.log(array);
             break;
           // Adicione outros casos para blocos personalizados.
           default:
