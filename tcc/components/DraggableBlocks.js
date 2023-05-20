@@ -1,26 +1,29 @@
 // DraggableBlocks.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import DraggableGrid from 'react-native-draggable-grid';
 
-const DraggableBlocks = ({ onArrayGenerated }) => {
-  const [items, setItems] = useState([
-    { key: 'move_forward', name: 'Mover para frente', data: { steps: 1 } },
-    { key: 'if_block', name: 'Se', data: { condition: 'sensor', childrenTrue: [], childrenFalse: [] } },
-    // Adicione outros blocos personalizados aqui.
-  ]);
+const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
+  const [items, setItems] = useState(blocks);
+
+  useEffect(() => {
+    onArrayGenerated(blocks);
+    setItems(blocks);
+  }, [blocks]);
 
   const handleAddChild = (parentIndex, condition) => {
     const newItems = [...items];
     if(condition === 'true') {
       newItems[parentIndex].data.childrenTrue.push({
         key: 'move_forward',
+        id: 'move_forward',
         name: 'Mover para frente',
         data: { steps: 1 },
       });
     } else {
       newItems[parentIndex].data.childrenFalse.push({
         key: 'move_forward',
+        id: 'move_forward',
         name: 'Mover para frente',
         data: { steps: 1 },
       })
@@ -38,11 +41,10 @@ const DraggableBlocks = ({ onArrayGenerated }) => {
         alignItems: 'center',
         padding: 10,
         borderRadius: 5,
-        margin: 5,
       }}
     >
       <Text>{item.name}</Text>
-      {item.key === 'if_block' && (
+      {item.id === 'if_block' && (
         <>
           <Text>Condição: {item.data.condition}</Text>
           <TouchableOpacity onPress={() => handleAddChild(order, "true")} style={{ marginTop: 10 }}>
