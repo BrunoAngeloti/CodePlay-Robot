@@ -11,7 +11,7 @@ const App = () => {
 
   const handleArrayGenerated = (blocks) => {
     const array = blocksToArray(blocks);
-    console.log('Array de informações:', array);
+    //console.log('Array de informações:', array);
     // Envie o array de informações para o ESP e interprete a programação sequencial.
   };
 
@@ -21,9 +21,31 @@ const App = () => {
     setShowCatalog(false);
   };
 
+  const teste = (blocks) => {
+    blocks.map((block) => {
+      if (block.id === 'if_block') {
+        console.log('executando if_block');
+        if (block.data.condition === 'true') {
+          console.log('executando true');
+          teste(block.data.childrenTrue);
+        } else {
+          console.log('executando false');
+          teste(block.data.childrenFalse);
+        }
+      }
+      if (block.id === 'move_forward') {
+        console.log('executando move_forward');
+      }
+      if (block.id === 'move_back') {
+        console.log('executando move_back');
+      }
+    })
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Button title="Adicionar bloco" onPress={() => setShowCatalog(true)} />
+      <Button title="Executa" onPress={() => teste(blocks)} />
       <DraggableBlocks blocks={blocks} onArrayGenerated={handleArrayGenerated} />
       <Modal visible={showCatalog} onRequestClose={() => setShowCatalog(false)}>
         <View style={{ padding: 20 }}>
@@ -40,7 +62,7 @@ const App = () => {
             <Text>Mover para tras</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => handleAddBlock({ id: 'if_block', key: 'if_block', name: 'Se', data: { condition: 'sensor', childrenTrue: [], childrenFalse: [] } })}
+            onPress={() => handleAddBlock({ id: 'if_block', key: 'if_block', name: 'Se', data: { condition: 'true', childrenTrue: [], childrenFalse: [] } })}
             style={{ backgroundColor: 'lightblue', padding: 10, borderRadius: 5, marginBottom: 10 }}
           >
             <Text>Se</Text>

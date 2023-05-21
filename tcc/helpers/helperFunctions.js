@@ -10,7 +10,6 @@ const blocksToArray = (blocks) => {
             break;
           case 'if_block':
             array.push({ action: 'if', condition: block.data.condition, blocksTrue: blocksToArray(block.data.childrenTrue), blocksFalse: blocksToArray(block.data.childrenFalse) });
-            console.log(array);
             break;
           case 'move_back':
             array.push({ action: 'move_back', steps: block.data.steps });
