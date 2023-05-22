@@ -20,6 +20,7 @@ const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
 
   const handleAddChild = (parentIndex, condition) => {
     const newItems = [...items];
+    console.log(parentIndex)
     if(condition === 'true') {
       newItems[parentIndex].data.childrenTrue.push({
         key: 'move_forward',
@@ -39,7 +40,7 @@ const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
     onArrayGenerated(newItems);
   };
 
-  const renderItem = ({ item, index, drag, isActive }) => (
+  const renderItem = ({ item, getIndex, drag }) => (
     <TouchableOpacity 
       style={{
         backgroundColor: 'lightblue',
@@ -55,10 +56,10 @@ const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
       {item.id === 'if_block' && (
         <>
           <Text>Condição: {item.data.condition}</Text>
-          <TouchableOpacity onPress={() => handleAddChild(index, "true")} style={{ marginTop: 10 }}>
+          <TouchableOpacity onPress={() => handleAddChild(getIndex(), "true")} style={{ marginTop: 10 }}>
             <Text style={{ color: 'blue' }}>Adicionar condicoes true</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleAddChild(index, "false")} style={{ marginTop: 10 }}>
+          <TouchableOpacity onPress={() => handleAddChild(getIndex(), "false")} style={{ marginTop: 10 }}>
             <Text style={{ color: 'red' }}>Adicionar condicoes false</Text>
           </TouchableOpacity>
           {item.data.childrenTrue.map((child, childIndex) => (
