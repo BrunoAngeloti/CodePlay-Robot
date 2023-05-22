@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, Button, Modal, TouchableOpacity, Text, View } from 'react-native';
 import DraggableBlocks from './components/DraggableBlocks';
 import { blocksToArray } from './helpers/helperFunctions';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App = () => {
   const [showCatalog, setShowCatalog] = useState(false);
@@ -10,9 +11,7 @@ const App = () => {
   const [blockCounter, setBlockCounter] = useState(0);
 
   const handleArrayGenerated = (blocks) => {
-    const array = blocksToArray(blocks);
-    //console.log('Array de informações:', array);
-    // Envie o array de informações para o ESP e interprete a programação sequencial.
+    setBlocks(blocks);
   };
 
   const handleAddBlock = (block) => {
@@ -43,10 +42,12 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, padding: 20, paddingTop: 40 }}>
       <Button title="Adicionar bloco" onPress={() => setShowCatalog(true)} />
       <Button title="Executa" onPress={() => teste(blocks)} />
+      <GestureHandlerRootView style={{flex: 1}}>
       <DraggableBlocks blocks={blocks} onArrayGenerated={handleArrayGenerated} />
+      </GestureHandlerRootView>
       <Modal visible={showCatalog} onRequestClose={() => setShowCatalog(false)}>
         <View style={{ padding: 20 }}>
           <TouchableOpacity

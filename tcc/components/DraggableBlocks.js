@@ -1,7 +1,6 @@
-// DraggableBlocks.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import DraggableGrid from 'react-native-draggable-grid';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
   const [items, setItems] = useState(blocks);
@@ -9,6 +8,14 @@ const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
   useEffect(() => {
     onArrayGenerated(blocks);
     setItems(blocks);
+  }, [blocks]);
+
+  useEffect(() => {
+    console.log("------------------")
+    blocks.map((block) => {
+      console.log(block.id);
+    })
+    console.log("------------------")
   }, [blocks]);
 
   const handleAddChild = (parentIndex, condition) => {
@@ -32,56 +39,62 @@ const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
     onArrayGenerated(newItems);
   };
 
-  const renderItem = (item, order) => (
-    <View
-      key={item.key}
+  const renderItem = ({ item, index, drag, isActive }) => (
+    <TouchableOpacity 
       style={{
         backgroundColor: 'lightblue',
-        justifyContent: 'center',
         alignItems: 'center',
-        padding: 10,
+        justifyContent: 'center',
+        padding: 15,
         borderRadius: 5,
+        marginTop: 10,
       }}
+      onLongPress={drag}
     >
       <Text>{item.name}</Text>
       {item.id === 'if_block' && (
         <>
           <Text>Condição: {item.data.condition}</Text>
-          <TouchableOpacity onPress={() => handleAddChild(order, "true")} style={{ marginTop: 10 }}>
+          <TouchableOpacity onPress={() => handleAddChild(index, "true")} style={{ marginTop: 10 }}>
             <Text style={{ color: 'blue' }}>Adicionar condicoes true</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleAddChild(order, "false")} style={{ marginTop: 10 }}>
+          <TouchableOpacity onPress={() => handleAddChild(index, "false")} style={{ marginTop: 10 }}>
             <Text style={{ color: 'red' }}>Adicionar condicoes false</Text>
           </TouchableOpacity>
-          {item.data.childrenTrue.map((child, index) => (
-            <View key={index} style={{ backgroundColor: 'lightgray', marginTop: 5, borderRadius: 5 }}>
+          {item.data.childrenTrue.map((child, childIndex) => (
+            <View key={childIndex} style={{ backgroundColor: 'lightgray', marginTop: 5, borderRadius: 5 }}>
               <Text style={{ padding: 5 }}>{child.name}</Text>
             </View>
           ))}
-          {item.data.childrenFalse.map((child, index) => (
-            <View key={index} style={{ backgroundColor: 'lightred', marginTop: 5, borderRadius: 5 }}>
+          {item.data.childrenFalse.map((child, childIndex) => (
+            <View key={childIndex} style={{ backgroundColor: 'lightred', marginTop: 5, borderRadius: 5 }}>
               <Text style={{ padding: 5 }}>{child.name}</Text>
             </View>
           ))}
         </>
       )}
-    </View>
+    </TouchableOpacity>
   );
 
-  const onDragRelease = (newItems) => {
-    setItems(newItems);
-    onArrayGenerated(newItems);
-  };
-
   return (
-    <DraggableGrid
-      numColumns={1}
-      renderItem={renderItem}
-      data={items}
-      onDragRelease={onDragRelease}
-      
-    />
+    <View style={styles.wrapper}>
+      <DraggableFlatList
+        data={items}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => `draggable-item-${index}`}
+        onDragEnd={({ data }) => {setItems(data); onArrayGenerated(data);}}
+      />
+    </View>
   );
 };
 
-export default DraggableBlocks
+const styles = StyleSheet.create({
+    wrapper:{
+        width: '100%',
+        justifyContent:'center',
+        alignItems: 'center',
+        display: 'flex',
+    }
+});
+
+export default DraggableBlocks;
