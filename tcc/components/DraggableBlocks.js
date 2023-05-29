@@ -1,44 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
+import ModalSelectionBlocks from './ModalSelectionBlocks';
 
 const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
   const [items, setItems] = useState(blocks);
+  const [showCatalog, setShowCatalog] = useState(false);
+  const [currentBlockArgs, setCurrentBlockArgs] = useState(null);
+  
+  const handleAddChild = (parentIndex, condition) => {
+    setCurrentBlockArgs({ parentIndex, condition });
+    setShowCatalog(true);
+  };
 
   useEffect(() => {
     onArrayGenerated(blocks);
     setItems(blocks);
   }, [blocks]);
 
-  useEffect(() => {
-    console.log("------------------")
-    blocks.map((block) => {
-      console.log(block.id);
-    })
-    console.log("------------------")
-  }, [blocks]);
-
-  const handleAddChild = (parentIndex, condition) => {
+  const addBlockToChild = (block, parentIndex, condition) => {
     const newItems = [...items];
-    console.log(parentIndex)
     if(condition === 'true') {
-      newItems[parentIndex].data.childrenTrue.push({
-        key: 'move_forward',
-        id: 'move_forward',
-        name: 'Mover para frente',
-        data: { steps: 1 },
-      });
+      newItems[parentIndex].data.childrenTrue.push(block);
     } else {
-      newItems[parentIndex].data.childrenFalse.push({
-        key: 'move_forward',
-        id: 'move_forward',
-        name: 'Mover para frente',
-        data: { steps: 1 },
-      })
+      newItems[parentIndex].data.childrenFalse.push(block)
     }
     setItems(newItems);
     onArrayGenerated(newItems);
   };
+  
 
   const renderItem = ({ item, getIndex, drag }) => (
     <TouchableOpacity 
@@ -84,6 +74,13 @@ const DraggableBlocks = ({ blocks, onArrayGenerated }) => {
         renderItem={renderItem}
         keyExtractor={(item, index) => `draggable-item-${index}`}
         onDragEnd={({ data }) => {setItems(data); onArrayGenerated(data);}}
+      />
+      <ModalSelectionBlocks
+        showCatalog={showCatalog}
+        setShowCatalog={setShowCatalog}
+        handleAddBlock={addBlockToChild}
+        parentIndex={currentBlockArgs?.parentIndex}
+        condition={currentBlockArgs?.condition}
       />
     </View>
   );
