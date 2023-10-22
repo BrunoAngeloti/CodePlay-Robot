@@ -4,7 +4,6 @@
 #include <Arduino.h>
 #include <WebSocketsClient.h>
 #include <SocketIOclient.h>
-#include <ArduinoJson.h>
 
 
 void init_socket();

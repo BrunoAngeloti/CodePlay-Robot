@@ -1,10 +1,11 @@
 #include "wifi.h"
 
-const char *ssid = "MEU WIFI";
-const char *password = "MINHA SENHA";
+const char *ssid = "Intelbras";
+const char *password = "04091968";
 unsigned long previousMillis = 0;
 
-void init_wifi(){
+void init_wifi()
+{
   WiFi.begin(ssid, password);
 
   unsigned long currentMillis = millis();
@@ -12,12 +13,14 @@ void init_wifi(){
 
   Serial.println("Connecting to WiFi...");
 
-  while (WiFi.status() != WL_CONNECTED){
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
 
     unsigned long currentMillis = millis();
-    if (currentMillis - previousMillis >= 12000){
+    if (currentMillis - previousMillis >= 12000)
+    {
       previousMillis = currentMillis;
       return;
     }
