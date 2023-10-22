@@ -4,11 +4,14 @@ import { SafeAreaView, Button, Modal, TouchableOpacity, Text, View } from 'react
 import DraggableBlocks from './components/DraggableBlocks';
 import { blocksToArray } from './helpers/helperFunctions';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import socket from './services/socketio';
 
 const App = () => {
   const [showCatalog, setShowCatalog] = useState(false);
   const [blocks, setBlocks] = useState([]);
   const [blockCounter, setBlockCounter] = useState(0);
+
+  const [statusLed, setStatusLed] = useState(0);
 
   const handleArrayGenerated = (blocks) => {
     setBlocks(blocks);
@@ -20,8 +23,20 @@ const App = () => {
     setShowCatalog(false);
   };
 
+  const testeEmit = () => {
+    if (statusLed === 0) {
+      socket.emit('data', 1);
+      setStatusLed(1);
+    } else {
+      socket.emit('data', 0);
+      setStatusLed(0);
+    }
+  };
+
+
   const teste = (blocks) => {
-    blocks.map((block) => {
+    console.log(blocks);
+    /*blocks.map((block) => {
       if (block.id === 'if_block') {
         console.log('executando if_block');
         if (block.data.condition === 'true') {
@@ -38,15 +53,21 @@ const App = () => {
       if (block.id === 'move_back') {
         console.log('executando move_back');
       }
-    })
+    })*/
   };
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 20, paddingTop: 40 }}>
       <Button title="Adicionar bloco" onPress={() => setShowCatalog(true)} />
       <Button title="Executa" onPress={() => teste(blocks)} />
+
+      {/*<Button 
+        title={statusLed === 0 ? 'Ligar LED' : 'Desligar LED'}
+        onPress={() => testeEmit()} 
+      />*/}
+
       <GestureHandlerRootView style={{flex: 1}}>
-      <DraggableBlocks blocks={blocks} onArrayGenerated={handleArrayGenerated} />
+        <DraggableBlocks blocks={blocks} onArrayGenerated={handleArrayGenerated} />
       </GestureHandlerRootView>
       <Modal visible={showCatalog} onRequestClose={() => setShowCatalog(false)}>
         <View style={{ padding: 20 }}>
@@ -68,7 +89,7 @@ const App = () => {
           >
             <Text>Se</Text>
           </TouchableOpacity>
-          {/* Adicione outros blocos ao catálogo aqui. */}
+          {/* Adicione outros blocos ao catálogo aqui.*/ }
         </View>
       </Modal>
     </SafeAreaView>
