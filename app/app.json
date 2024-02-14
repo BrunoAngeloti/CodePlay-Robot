@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.brunoangeloti.codeplayrobot"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +31,9 @@
       "eas": {
         "projectId": "e835e91b-f83e-471a-9b94-25e14110849f"
       }
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
