@@ -6,6 +6,7 @@ import {
   ButtonContainer,
   ButtonText,
   Section,
+  Robot,
 } from "./styles";
 import { FontAwesome5, Feather, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -67,6 +68,7 @@ const Home = () => {
           icon={<FontAwesome5 name="wifi" size={20} {...commonAttributes} />}
         />
       </Section>
+      <Robot source={require("../../assets/robot-1-arm.png")} />
     </Container>
   );
 };

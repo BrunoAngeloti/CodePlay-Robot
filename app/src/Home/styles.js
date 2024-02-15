@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const Container = styled.SafeAreaView`
+export const Container = styled.View`
   flex: 1;
   background-color: #f3f3f3;
   display: flex;
@@ -41,4 +41,13 @@ export const Section = styled.View`
 export const ButtonText = styled.Text`
   color: #011627;
   font-family: "Poppins-SemiBold";
+`;
+
+export const Robot = styled.Image`
+  width: 220px;
+  height: 250px;
+  position: relative;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
 `;
