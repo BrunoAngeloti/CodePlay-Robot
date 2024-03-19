@@ -11,21 +11,11 @@ import {
 import { FontAwesome5, Feather, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUser } from "../../contexts/UserContext";
 
 const Home = () => {
-  const [userName, setUserName] = useState("");
+  const { user } = useUser();
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const checkFirstTimeUser = async () => {
-      const name = await AsyncStorage.getItem("userName");
-      if (name) {
-        setUserName(name);
-      }
-    };
-
-    checkFirstTimeUser();
-  }, [navigation]);
 
   const Button = ({ title, icon }) => {
     return (
@@ -43,7 +33,7 @@ const Home = () => {
 
   return (
     <Container>
-      <Title>Olá, {userName}</Title>
+      <Title>Olá, {user?.name}</Title>
       <Section>
         <Button
           title="Desafios"
