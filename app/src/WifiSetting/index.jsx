@@ -13,7 +13,7 @@ export const WifiSetting = () => {
     <Container>
       <Paragraph>
         1. Após ligar o seu robô, você deve procurar uma rede Wi-Fi chamada{" "}
-        <ParagraphBold>codeplayrobot, </ParagraphBold>conecte seu aparelho nela.
+        <ParagraphBold>codeplayrobot, seguido do número do robô.</ParagraphBold> Conecte seu aparelho nela.
       </Paragraph>
       <Paragraph>
         2. Após isso, clicar no botão abaixo para ser redirecionado para o

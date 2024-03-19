@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { supabase } from '../../lib/initSupabase';
 import { useNavigation } from '@react-navigation/native';
+
+import { Container, StyledInput, StyledButton, ButtonText, ToggleText } from './styles';
 
 const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
-  const [isSignUp, setIsSignUp] = useState(false); // Novo estado para controlar a exibição dos campos adicionais
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const navigation = useNavigation();
+
+  const cleanFields = () => {
+    setEmail('');
+    setPassword('');
+    setName('');
+    setAge('');
+    setIsSignUp(false);
+  };
 
   const toggleSignUp = () => {
     setIsSignUp(!isSignUp);
@@ -60,47 +70,39 @@ const AuthPage = () => {
 
     await login();
 
+    cleanFields();
     navigation.navigate('Home');
   };
   
 
   return (
-    <View style={styles.container}>
-      <TextInput style={styles.input} placeholder="Email" onChangeText={setEmail} value={email} />
-      <TextInput style={styles.input} placeholder="Senha" onChangeText={setPassword} secureTextEntry={true} value={password} />
-
+    <Container>
+      <StyledInput placeholder="Email" onChangeText={setEmail} value={email} />
+      <StyledInput
+        placeholder="Senha"
+        onChangeText={setPassword}
+        secureTextEntry={true}
+        value={password}
+      />
       {isSignUp && (
         <>
-          <TextInput style={styles.input} placeholder="Nome" onChangeText={setName} value={name} />
-          <TextInput style={styles.input} placeholder="Idade" onChangeText={setAge} keyboardType="numeric" value={age} />
+          <StyledInput placeholder="Nome" onChangeText={setName} value={name} />
+          <StyledInput
+            placeholder="Idade"
+            onChangeText={setAge}
+            keyboardType="numeric"
+            value={age}
+          />
         </>
       )}
-
-      <Button title={isSignUp ? "Criar Conta" : "Login"} onPress={handleLoginOrSignUp} />
-
+      <StyledButton onPress={handleLoginOrSignUp}>
+        <ButtonText>{isSignUp ? 'Criar Conta' : 'Login'}</ButtonText>
+      </StyledButton>
       <TouchableOpacity onPress={toggleSignUp}>
-        <Text style={styles.toggleText}>{isSignUp ? "Já tem conta? Entrar" : "Criar conta"}</Text>
+        <ToggleText>{isSignUp ? 'Já tem conta? Entrar' : 'Criar conta'}</ToggleText>
       </TouchableOpacity>
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  input: {
-    marginBottom: 10,
-    borderWidth: 1,
-    padding: 10,
-  },
-  toggleText: {
-    marginTop: 20,
-    textAlign: 'center',
-    color: 'blue',
-  },
-});
 
 export default AuthPage;
