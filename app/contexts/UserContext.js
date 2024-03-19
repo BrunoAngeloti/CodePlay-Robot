@@ -29,9 +29,8 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("fetching user details");
     fetchUserDetails();
-  }, [supabase]);
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, fetchUserDetails }}>

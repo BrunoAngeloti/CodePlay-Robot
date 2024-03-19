@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { supabase } from '../../lib/initSupabase';
+import { useNavigation } from '@react-navigation/native';
 
 const AuthPage = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +9,8 @@ const AuthPage = () => {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [isSignUp, setIsSignUp] = useState(false); // Novo estado para controlar a exibição dos campos adicionais
+
+  const navigation = useNavigation();
 
   const toggleSignUp = () => {
     setIsSignUp(!isSignUp);
@@ -56,6 +59,8 @@ const AuthPage = () => {
     } 
 
     await login();
+
+    navigation.navigate('Home');
   };
   
 

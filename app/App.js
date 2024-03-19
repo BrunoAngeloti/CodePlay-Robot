@@ -38,10 +38,6 @@ const App = () => {
     checkUserSession();
   }, []);
 
-  const onAuthenticated = () => {
-    setInitialRoute("Home");
-  };
-
   if (!fontsLoaded) {
     return null;
   }
@@ -68,11 +64,11 @@ const App = () => {
             options={{ headerShown: false }}
             component={Home}
           />
-          <Stack.Screen name="AuthPage" options={{ headerShown: false }}>
-            {(props) => (
-              <AuthPage {...props} onAuthenticated={onAuthenticated} />
-            )}
-          </Stack.Screen>
+          <Stack.Screen
+            name="AuthPage"
+            options={{ headerShown: false }}
+            component={AuthPage}
+          />
           <Stack.Screen name="Desafios" component={Challenges} />
           <Stack.Screen name="Programação Livre" component={FreeCode} />
           <Stack.Screen name="Controle Livre" component={FreeControl} />
