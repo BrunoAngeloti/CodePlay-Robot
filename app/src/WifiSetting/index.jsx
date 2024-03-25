@@ -35,7 +35,10 @@ export const WifiSetting = () => {
       <ScrollView>
         <Paragraph>
           1. Após ligar o seu robô, você deve procurar uma rede Wi-Fi chamada{" "}
-          <ParagraphBold>codeplayrobot, seguido do número do robô.</ParagraphBold> Conecte seu aparelho nela.
+          <ParagraphBold>codeplayrobot, seguido do número do robô.</ParagraphBold> Conecte seu aparelho nela. Se o seu robô ja estiver conectado a uma rede (LED acesso), pule para a etapa 4. 
+        </Paragraph>
+        <Paragraph>
+          OBS: Se quiser conectar o robô a uma rede diferente, basta apertar o botão de reset nele e seguir os passos novamente.
         </Paragraph>
         <Paragraph>
           2. Após isso, clicar no botão abaixo para ser redirecionado para o
@@ -44,35 +47,27 @@ export const WifiSetting = () => {
         <Paragraph>
           3. Quando abrir esse Gerenciador, clicar no botão{" "}
           <ParagraphBold>Configure WiFi</ParagraphBold> e conecte na sua rede
-          Wi-Fi.
+          Wi-Fi, quando o robô estiver conectado a rede, a luz em cima do robô irá acender. Volte para o aplicativo.
         </Paragraph>
         <Paragraph>
-          4. Caso tenha mais de um robô na mesma rede, selecione o robô do mesmo número que você se conectou na lista abaixo.
+          4. Selecione o robô na lista abaixo:
         </Paragraph>
 
         <EspList>
           {espList && Object.keys(espList).map((espId) => (
-            <Paragraph>
-              {espId}
-            </Paragraph>
+            <EspItem key={espId} onPress={() => handleEspSelect(espId)}>
+              <EspItemText>Robô {espId}</EspItemText>
+            </EspItem>
           ))}
         </EspList>
 
 
         <Paragraph>
-          4. Pronto! Agora se a Luz em cima do robô estiver acesa, está tudo certo
-          com seu robô. Pode começar a brincar ;)
+          5. Pronto! Seu robô está conectado. Agora você pode controlá-lo 
         </Paragraph>
-        <Paragraph>
-          4. Pronto! Agora se a Luz em cima do robô estiver acesa, está tudo certo
-          com seu robô. Pode começar a brincar ;)
-        </Paragraph>
-
-      
       </ScrollView>
 
       <Button onPress={() => {
-        // Abrir no navegador o endereço 192.168.4.1
         window.open('http://192.168.4.1');
       }}>
         <ButtonText>Configurar Wi-Fi</ButtonText>

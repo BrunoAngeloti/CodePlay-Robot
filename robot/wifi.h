@@ -8,5 +8,6 @@
 #include <WiFiManager.h>
 
 void init_wifi();
+void resetWifiManager();
 
 #endif

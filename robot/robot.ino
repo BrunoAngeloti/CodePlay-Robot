@@ -6,7 +6,6 @@ void setup()
 {
   Serial.begin(115200);
   delay(250);
-  init_LED();
   init_wifi();
   init_socket();
 }
@@ -14,6 +13,7 @@ void setup()
 void loop()
 {
   connection_socket();
+  checkButton(); 
   
   if(WiFi.status() != WL_CONNECTED) {
     Serial.println("Desconectado do WiFi, tentando reconectar...");

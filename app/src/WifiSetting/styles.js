@@ -37,18 +37,18 @@ export const ButtonText = styled.Text`
 `;
 
 export const EspList = styled.View`
-  margin: 20px 0;
+  margin: 10px 0;
 `;
 
-export const EspItem = styled.Button`
-  background-color: #f0f0f0; // Escolha uma cor de fundo
-  border-radius: 10px; // Borda arredondada para os itens
+export const EspItem = styled.TouchableOpacity`
+  background-color: #f0f0f0;
+  border-radius: 10px;
   padding: 15px;
-  margin-bottom: 10px; // Espaçamento entre os itens
-  align-items: center; // Centraliza o texto no botão
+  margin-bottom: 10px;
+  align-items: center;
 `;
 
 export const EspItemText = styled.Text`
-  color: #333; // Cor do texto
-  font-size: 16px; // Tamanho do texto
+  color: #333;
+  font-size: 16px;
 `;

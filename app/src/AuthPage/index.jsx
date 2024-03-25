@@ -34,8 +34,10 @@ const AuthPage = () => {
 
     if (errorSignIn) {
       alert(errorSignIn.message);
-      return;
+      return { error: true };
     }
+
+    return { error: false };
   }
 
   const signUp = async () => {
@@ -46,10 +48,11 @@ const AuthPage = () => {
 
     if (error) {
       alert(error.message);
-      return;
+      return { error: true };
     }
 
     insertUser({ userId: data.user.id });
+    return { error: false };
   }
 
   const insertUser = async ({ userId }) => {
@@ -61,14 +64,22 @@ const AuthPage = () => {
       alert(insertError.message);
       return;
     } 
+
+    
   }
 
   const handleLoginOrSignUp = async () => {
     if (isSignUp) {
-      await signUp();    
+      const response = await signUp();    
+      if (response.error) {
+        return
+      }
     } 
 
-    await login();
+    const response = await login();
+    if (response.error) {
+      return;
+    }
 
     cleanFields();
     navigation.navigate('Home');
