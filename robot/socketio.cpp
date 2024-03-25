@@ -8,10 +8,10 @@ SocketIOclient socket;
 void init_socket()
 {
   socket.begin("192.168.15.86", 4000, "/socket.io/?EIO=4");
-
   socket.onEvent(socketIOEvent);
+
   Serial.println("Configurado o socket.io");
-  delay(500);
+  delay(1000); 
 }
 
 void connection_socket()
@@ -19,22 +19,40 @@ void connection_socket()
   socket.loop();
 }
 
+void onConnected(){
+  DynamicJsonDocument doc(1024);
+  JsonArray array = doc.to<JsonArray>();
+
+  // Adicionar o nome do evento
+  array.add("registerESP");
+
+  // Adicionar payload (parâmetros) para o evento
+  JsonObject param1 = array.createNestedObject();
+  param1["espID"] = "1";
+
+  // JSON para String (serialização)
+  String output;
+  serializeJson(doc, output);
+
+  // Enviar evento
+  socket.sendEVENT(output);
+  Serial.println(output);
+}
 
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length) {
-    String text = String((char *)&payload[0]);
-    String onoff = text.substring(8, text.length()-1);
-    
     switch(type) {
         case sIOtype_DISCONNECT:
-            Serial.printf("[IOc] Desconectado!\n");
+            Serial.printf("[IOc] Disconnected!\n");
             break;
         case sIOtype_CONNECT:
-            Serial.printf("[IOc] Conectado ao url: %s\n", payload);
+            Serial.printf("[IOc] Connected to url: %s\n", payload);
+            
+            // join default namespace (no auto join in Socket.IO V3)
             socket.send(sIOtype_CONNECT, "/");
+            onConnected();
             break;
         case sIOtype_EVENT:
-            Serial.printf("[IOc] get event: %s\n", payload); 
-            changeLEDStatus(onoff);
+            Serial.printf("[IOc] get event: %s\n", payload);
             break;
         case sIOtype_ACK:
             Serial.printf("[IOc] get ack: %u\n", length);
@@ -53,11 +71,4 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length)
             hexdump(payload, length);
             break;
     }
-}
-
-
-// Recebe algo do servidor
-void event(const char *payload, size_t length)
-{
-  Serial.printf("got message: %s\n", payload);
 }

@@ -1,31 +1,20 @@
 #include "wifi.h"
 
-const char *ssid = "Intelbras";
-const char *password = "04091968";
-unsigned long previousMillis = 0;
+String espUniqueID = "1";
+
+WiFiManager wifiManager;
 
 void init_wifi()
 {
-  WiFi.begin(ssid, password);
+ wifiManager.autoConnect(("codeplayrobot_" + espUniqueID).c_str());
 
-  unsigned long currentMillis = millis();
-  unsigned long previousMillis = millis();
+ Serial.println("Conectado ao WiFi");
+ pinMode(D8, OUTPUT);
+ digitalWrite(D8, HIGH);
+}
 
-  Serial.println("Connecting to WiFi...");
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-
-    unsigned long currentMillis = millis();
-    if (currentMillis - previousMillis >= 12000)
-    {
-      previousMillis = currentMillis;
-      return;
-    }
-  }
-
-  Serial.println("Connected to the WiFi network");
-  delay(500);
+void resetWifiManager(){
+  wifiManager.resetSettings();
+  digitalWrite(D8, LOW);
+  ESP.restart();
 }
