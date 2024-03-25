@@ -66,7 +66,7 @@ const Home = () => {
           }
         />
         <Button
-          title="Configurar Wi-Fi"
+          title="Conectar Robô"
           icon={<FontAwesome5 name="wifi" size={20} {...commonAttributes} />}
         />
         <Button

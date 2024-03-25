@@ -72,7 +72,7 @@ const App = () => {
           <Stack.Screen name="Desafios" component={Challenges} />
           <Stack.Screen name="Programação Livre" component={FreeCode} />
           <Stack.Screen name="Controle Livre" component={FreeControl} />
-          <Stack.Screen name="Configurar Wi-Fi" component={WifiSetting} />
+          <Stack.Screen name="Conectar Robô" component={WifiSetting} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
