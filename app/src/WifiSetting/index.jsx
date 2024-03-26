@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import socket from "../../services/socketio";
-import { ScrollView } from "react-native";
+import { ScrollView, Linking } from "react-native";
 
 import {
   Container,
@@ -74,7 +74,7 @@ export const WifiSetting = () => {
       </ScrollView>
 
       <Button onPress={() => {
-        window.open('http://192.168.4.1');
+        Linking.openURL('http://192.168.4.1');
       }}>
         <ButtonText>Configurar Wi-Fi</ButtonText>
       </Button>
