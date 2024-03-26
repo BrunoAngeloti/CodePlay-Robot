@@ -41,7 +41,7 @@ export const EspList = styled.View`
 `;
 
 export const EspItem = styled.TouchableOpacity`
-  background-color: #f0f0f0;
+  background-color: ${(props) => (props.isSelected ? "#bdecb6" : "#f0f0f0")};
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 10px;

@@ -6,6 +6,7 @@ const UserContext = createContext(undefined);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [selectedRobot, setSelectedRobot] = useState(null);
 
   const fetchUserDetails = async () => {
     const { data: dataUser } = await supabase.auth.getUser();
@@ -33,7 +34,15 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser, fetchUserDetails }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        fetchUserDetails,
+        selectedRobot,
+        setSelectedRobot,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

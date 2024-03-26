@@ -18,6 +18,7 @@ import {
 } from "./styles";
 
 import { ScrollView } from "react-native";
+import { useUser } from "../../contexts/UserContext";
 
 export const Challenges = () => {
   const levels = [
@@ -36,6 +37,10 @@ export const Challenges = () => {
   ];
 
   const challenges = Array.from({ length: 14 }, (_, i) => i + 1);
+
+  const { selectedRobot } = useUser();
+  
+  console.log(selectedRobot);
 
   return (
     <Container>

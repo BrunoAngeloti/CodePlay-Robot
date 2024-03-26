@@ -12,22 +12,23 @@ import {
   EspItem,
   EspItemText,
 } from "./styles";
+import { useUser } from "../../contexts/UserContext";
 
 export const WifiSetting = () => {
   const [espList, setEspList] = useState({});
+  const { selectedRobot, setSelectedRobot } = useUser();
 
   useEffect(() => {
-    console.log("Solicitando lista de ESPs...", socket.connected);
     socket.emit('requestEspList');
   }, []);
 
   socket.on('espListResponse', (espList) => {
-    console.log(espList);
     setEspList(espList);
   });
 
   const handleEspSelect = (espId) => {
     console.log(`Robô ${espId} selecionado`);
+    setSelectedRobot(espId);
   };
 
   return (
@@ -55,7 +56,12 @@ export const WifiSetting = () => {
 
         <EspList>
           {espList && Object.keys(espList).map((espId) => (
-            <EspItem key={espId} onPress={() => handleEspSelect(espId)}>
+            <EspItem 
+              key={espId} 
+              onPress={() => handleEspSelect(espList[espId])}
+              disabled={selectedRobot === espList[espId]}
+              isSelected={selectedRobot === espList[espId]}
+            >
               <EspItemText>Robô {espId}</EspItemText>
             </EspItem>
           ))}
