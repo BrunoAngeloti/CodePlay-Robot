@@ -1,12 +1,14 @@
 #include "wifi.h"
 #include "fingers.h"
 #include "socketio.h"
+#include "motors.h"
 
 void setup()
 {
   Serial.begin(115200);
   delay(250);
   init_wifi();
+  init_motors();
   init_socket();
 }
 
