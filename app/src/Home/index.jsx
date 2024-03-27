@@ -8,27 +8,29 @@ import {
   Section,
   Robot,
 } from "./styles";
-import { FontAwesome5, Feather, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5, Feather, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useUser } from "../../contexts/UserContext";
 import { supabase } from "../../lib/initSupabase";
 
 const Home = () => {
-  const { user, fetchUserDetails } = useUser();
+  const { user, fetchUserDetails, selectedRobot } = useUser();
   const navigation = useNavigation();
 
-  const Button = ({ title, icon, onPress }) => {
+  const Button = ({ title, icon, onPress, disabled }) => {
     return (
-      <ButtonContainer onPress={() => {
+      <ButtonContainer 
+        onPress={() => {
           if (onPress) {
             onPress()
             return
           }
           navigation.navigate(title)
         }}
+        disabled={disabled}
+        isDisabledButton={disabled}
       >
-        {icon}
+        {disabled ? <AntDesign name="lock" size={24} {...commonAttributes} /> : icon}
         <ButtonText>{title}</ButtonText>
       </ButtonContainer>
     );
@@ -50,10 +52,12 @@ const Home = () => {
         <Button
           title="Desafios"
           icon={<FontAwesome5 name="trophy" size={20} {...commonAttributes} />}
+          disabled={!selectedRobot}
         />
         <Button
           title="Programação Livre"
           icon={<Feather name="code" size={24} {...commonAttributes} />}
+          disabled={!selectedRobot}
         />
         <Button
           title="Controle Livre"
@@ -64,6 +68,7 @@ const Home = () => {
               {...commonAttributes}
             />
           }
+          disabled={!selectedRobot}
         />
         <Button
           title="Conectar Robô"

@@ -27,6 +27,7 @@ export const ButtonContainer = styled.TouchableOpacity`
   padding: 15px;
   align-items: center;
   justify-content: center;
+  opacity: ${(props) => (props.isDisabledButton ? 0.5 : 1)};
 `;
 
 export const Section = styled.View`
