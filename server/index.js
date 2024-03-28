@@ -37,8 +37,6 @@ io.on("connection", (socket) => {
   socket.on("controlDirection", (data) => {
     const { espId, direction } = data;
 
-    console.log(`Direção ${direction} recebida do ESP ${espId}`);
-
     if (espId) {
       io.to(espId).emit("controlDirection", { direction });
     } else {

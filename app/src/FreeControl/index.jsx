@@ -8,8 +8,6 @@ import { useUser } from "../../contexts/UserContext";
 export const FreeControl = () => {
   const { selectedRobot } = useUser();
   const handleArrowPress = (direction) => {
-    // Aqui, `direction` pode ser "up", "right", "down", "left", ou "stop"
-    console.log(direction);
     // Emita a direção para o servidor
     socket.emit("controlDirection", { espId: selectedRobot, direction });
   };
