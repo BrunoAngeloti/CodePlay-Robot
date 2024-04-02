@@ -33,47 +33,14 @@ const Backup = () => {
     setShowCatalog(false);
   };
 
-  const testeEmit = () => {
-    if (statusLed === 0) {
-      socket.emit("data", 1);
-      setStatusLed(1);
-    } else {
-      socket.emit("data", 0);
-      setStatusLed(0);
-    }
-  };
-
   const teste = (blocks) => {
     console.log(blocks);
-    /*blocks.map((block) => {
-      if (block.id === 'if_block') {
-        console.log('executando if_block');
-        if (block.data.condition === 'true') {
-          console.log('executando true');
-          teste(block.data.childrenTrue);
-        } else {
-          console.log('executando false');
-          teste(block.data.childrenFalse);
-        }
-      }
-      if (block.id === 'move_forward') {
-        console.log('executando move_forward');
-      }
-      if (block.id === 'move_back') {
-        console.log('executando move_back');
-      }
-    })*/
   };
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 20, paddingTop: 40 }}>
       <Button title="Adicionar bloco" onPress={() => setShowCatalog(true)} />
       <Button title="Executa" onPress={() => teste(blocks)} />
-
-      <Button
-        title={statusLed === 0 ? "Ligar LED" : "Desligar LED"}
-        onPress={() => testeEmit()}
-      />
 
       <GestureHandlerRootView style={{ flex: 1 }}>
         <DraggableBlocks
