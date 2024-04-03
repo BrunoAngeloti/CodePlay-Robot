@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Block = ({ item, drag, onDelete, isCatalog, setSelectedBlock }) => {
   // Aqui você pode definir diferentes estilos para diferentes tipos de comandos
@@ -43,6 +43,7 @@ const Block = ({ item, drag, onDelete, isCatalog, setSelectedBlock }) => {
       }}
     >
       <Feather name={getIcon(item.id)} size={24} color="#F3F3F3" />
+
       {!isCatalog ? (
         <Text style={styles.defaultText}>
           {`${item.title} ${item.data} ${item.type}`}
@@ -50,6 +51,7 @@ const Block = ({ item, drag, onDelete, isCatalog, setSelectedBlock }) => {
       ) : (
         <Text style={styles.defaultText}>{item.name}</Text>
       )}
+
       {onDelete && (
         <TouchableOpacity onPress={onDelete} style={{ marginLeft: "auto" }}>
           <Feather name="trash" size={20} color="#F3F3F3" />
@@ -66,8 +68,8 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 10, // Borda mais arredondada para se assemelhar à imagem
-
+    borderRadius: 5, // Borda mais arredondada para se assemelhar à imagem
+    position: "relative",
     elevation: 2, // Sombra leve para o bloco
     width: "100%", // Largura do bloco
   },
@@ -76,24 +78,38 @@ const styles = StyleSheet.create({
   },
   moveForwardBlock: {
     backgroundColor: "#0FA3B1",
+    borderColor: "#0B636B",
+    borderWidth: 1,
   },
   moveBackBlock: {
     backgroundColor: "#0FA3B1",
+    borderColor: "#0B636B",
+    borderWidth: 1,
   },
   moveRightBlock: {
     backgroundColor: "#0FA3B1",
+    borderColor: "#0B636B",
+    borderWidth: 1,
   },
   moveLeftBlock: {
     backgroundColor: "#0FA3B1",
+    borderColor: "#0B636B",
+    borderWidth: 1,
   },
   waitBlock: {
     backgroundColor: "#753742",
+    borderColor: "#381A1F",
+    borderWidth: 1,
   },
   distanceBlock: {
     backgroundColor: "#FE5F55",
+    borderColor: "#9E3333",
+    borderWidth: 1,
   },
   repeatBlock: {
     backgroundColor: "#6DA34D",
+    borderColor: "#3F6A26",
+    borderWidth: 1,
   },
   defaultText: {
     color: "#F3F3F3",
