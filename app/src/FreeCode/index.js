@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 
-import { Container } from "./styles";
+import { Container, ButtonPlus, ButtonPlay } from "./styles";
 import {
   Alert,
   Button,
@@ -40,8 +41,19 @@ export const FreeCode = () => {
 
   return (
     <Container>
-      <Button title="Adicionar bloco" onPress={() => setShowCatalog(true)} />
-      <Button title="Teste" onPress={() => console.log(blocks)} />
+      <ButtonPlay onPress={() => console.log(blocks)}>
+        <FontAwesome name="play" size={16} color="#F3F3F3" />
+        <Text
+          style={{
+            color: "#F3F3F3",
+            marginLeft: 10,
+            fontFamily: "Poppins-Regular",
+            marginTop: 2,
+          }}
+        >
+          Executar
+        </Text>
+      </ButtonPlay>
 
       <GestureHandlerRootView style={{ flex: 1 }}>
         <DraggableBlocks
@@ -50,6 +62,11 @@ export const FreeCode = () => {
           deleteBlock={deleteBlock}
         />
       </GestureHandlerRootView>
+
+      <ButtonPlus onPress={() => setShowCatalog(true)}>
+        <Feather name="plus" size={24} color="#F3F3F3" />
+      </ButtonPlus>
+
       <BlockCatalog
         isVisible={showCatalog}
         onClose={() => setShowCatalog(false)}
