@@ -54,4 +54,12 @@ io.on("connection", (socket) => {
     }
     console.log("USUÁRIO DESCONECTADO: " + socket.id);
   });
+
+  socket.on("executeCommands", (data) => {
+    const { espId, commands } = data;
+
+    io.to(espId).emit("commands", commands);
+
+    console.log(`Comandos enviados para ESP com ID ${espId}:`, commands);
+  });
 });

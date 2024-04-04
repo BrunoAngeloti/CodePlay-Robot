@@ -40,6 +40,34 @@ void onConnected(){
   Serial.println(output);
 }
 
+void processCommands(JsonArray commandsArray) {
+    for (JsonObject command : commandsArray) {
+        const char* commandId = command["id"];
+        const char* data = command["data"];
+
+        // Chame a função adequada com base no id do comando
+        if (strcmp(commandId, "move_forward") == 0) {
+            //moveForward(atoi(data));
+            Serial.println(data);
+        } else if (strcmp(commandId, "move_back") == 0) {
+           // moveBackward(atoi(data));
+            Serial.println(data);
+        } else if (strcmp(commandId, "move_right") == 0) {
+           // moveRight(atoi(data));
+           Serial.println(data);
+        } else if (strcmp(commandId, "move_left") == 0) {
+           // moveLeft(atoi(data));
+           Serial.println(data);
+        } else if (strcmp(commandId, "wait") == 0) {
+           // waitFor(atoi(data)); // Supondo que você tenha uma função `waitFor`
+           Serial.println(data);
+        } else {
+            // Código para comando desconhecido ou não implementado
+            Serial.println("Comando desconhecido");
+        }
+    }
+}
+
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length) {
     switch(type) {
         case sIOtype_DISCONNECT:
@@ -66,6 +94,11 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length)
             if (eventName == "controlDirection") {
               const char* direction = array[1]["direction"];
               moveRobot(direction);
+            }
+
+            if (eventName == "commands") {
+              JsonArray commandsArray = array[1].as<JsonArray>();
+              processCommands(commandsArray);
             }
                  
             break;

@@ -2,23 +2,19 @@ import React, { useState } from "react";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import { Container, ButtonPlus, ButtonPlay } from "./styles";
-import {
-  Alert,
-  Button,
-  Modal,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableBlocks from "../../components/DraggableBlocks";
 import BlockCatalog from "../../components/BlockCatalog";
+
+import { useUser } from "../../contexts/UserContext";
+import socket from "../../services/socketio";
 
 export const FreeCode = () => {
   const [showCatalog, setShowCatalog] = useState(false);
   const [blocks, setBlocks] = useState([]);
   const [blockCounter, setBlockCounter] = useState(0);
+  const { selectedRobot } = useUser();
 
   const handleArrayGenerated = (blocks) => {
     setBlocks(blocks);
@@ -39,9 +35,18 @@ export const FreeCode = () => {
     );
   };
 
+  const sendBlocksToServer = () => {
+    const dataToSend = {
+      espId: selectedRobot, // ID do ESP selecionado
+      commands: blocks, // Comandos a serem executados pelo ESP
+    };
+
+    socket.emit("executeCommands", dataToSend);
+  };
+
   return (
     <Container>
-      <ButtonPlay onPress={() => console.log(blocks)}>
+      <ButtonPlay onPress={sendBlocksToServer}>
         <FontAwesome name="play" size={16} color="#F3F3F3" />
         <Text
           style={{
