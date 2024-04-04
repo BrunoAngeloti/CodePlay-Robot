@@ -59,8 +59,8 @@ export const WifiSetting = () => {
             <EspItem 
               key={espId} 
               onPress={() => handleEspSelect(espList[espId])}
-              disabled={selectedRobot === espList[espId]}
-              isSelected={selectedRobot === espList[espId]}
+              //disabled={selectedRobot === espList[espId]}
+              //isSelected={selectedRobot === espList[espId]}
             >
               <EspItemText>Robô {espId}</EspItemText>
             </EspItem>

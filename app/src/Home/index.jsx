@@ -57,7 +57,7 @@ const Home = () => {
         <Button
           title="Programação Livre"
           icon={<Feather name="code" size={24} {...commonAttributes} />}
-          disabled={selectedRobot}
+          disabled={!selectedRobot}
         />
         <Button
           title="Controle Livre"
