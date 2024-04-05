@@ -9,7 +9,6 @@
 
 void init_socket();
 void connection_socket();
-void send_socket(String info);
 void processCommands(JsonArray commandsArray);
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length);
 void onConnected();

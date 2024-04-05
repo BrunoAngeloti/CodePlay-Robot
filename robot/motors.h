@@ -16,4 +16,10 @@ void moveLeft();
 void stopMotors();
 void moveRobot(const char* direction);
 
+void moveForwardCentimeters(int cent);
+void moveBackwardCentimeters(int cent);
+void moveRightDegrees(int deg);
+void moveLeftDegrees(int deg);
+void waitForSeconds(int second);
+
 #endif

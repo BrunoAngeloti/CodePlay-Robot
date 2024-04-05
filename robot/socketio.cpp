@@ -45,24 +45,22 @@ void processCommands(JsonArray commandsArray) {
         const char* commandId = command["id"];
         const char* data = command["data"];
 
-        // Chame a função adequada com base no id do comando
         if (strcmp(commandId, "move_forward") == 0) {
-            //moveForward(atoi(data));
-            Serial.println(data);
+            moveForwardCentimeters(atoi(data));
+            
         } else if (strcmp(commandId, "move_back") == 0) {
-           // moveBackward(atoi(data));
-            Serial.println(data);
+            moveBackwardCentimeters(atoi(data));
+            
         } else if (strcmp(commandId, "move_right") == 0) {
-           // moveRight(atoi(data));
-           Serial.println(data);
+           moveRightDegrees(atoi(data));
+
         } else if (strcmp(commandId, "move_left") == 0) {
-           // moveLeft(atoi(data));
-           Serial.println(data);
+           moveLeftDegrees(atoi(data));
+           
         } else if (strcmp(commandId, "wait") == 0) {
-           // waitFor(atoi(data)); // Supondo que você tenha uma função `waitFor`
-           Serial.println(data);
+           waitForSeconds(atoi(data));
+           
         } else {
-            // Código para comando desconhecido ou não implementado
             Serial.println("Comando desconhecido");
         }
     }
