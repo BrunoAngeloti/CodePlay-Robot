@@ -20,6 +20,7 @@ import {
 import { ScrollView } from "react-native";
 import { useUser } from "../../contexts/UserContext";
 import { supabase } from "../../lib/initSupabase";
+import { useNavigation } from "@react-navigation/native";
 
 export const Challenges = () => {
   const [challenges, setChallenges] = useState({ básico: [], intermediário: [], avançado: [] });
@@ -40,6 +41,8 @@ export const Challenges = () => {
   ];
 
   const { user, selectedRobot } = useUser();
+
+  const navigation = useNavigation();
 
   const checkIfChallengeIsDone = (challengeId) => {
     return user?.completed_challenges?.find((challenge) => challenge === challengeId);
@@ -75,6 +78,10 @@ export const Challenges = () => {
     fetchChallenges();
   }, []);
 
+  const goToChallengeDetails = (challenge) => {
+    navigation.navigate('Desafio', { challenge });
+  };
+
   return (
     <Container>
       <Header>
@@ -101,7 +108,7 @@ export const Challenges = () => {
                   key={challenge.id}
                   color={level.color}
                   done={checkIfChallengeIsDone(challenge.id)}
-                  onPress={() => console.log(`Play ${level.label} challenge name ${challenge.name}`)}
+                  onPress={() => goToChallengeDetails(challenge)}
                 >
                   <ChallengeText done={checkIfChallengeIsDone(challenge.id)} color={level.color}>
                     {index + 1}

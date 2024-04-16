@@ -16,6 +16,7 @@ import { FreeControl } from "./src/FreeControl";
 import { WifiSetting } from "./src/WifiSetting";
 import { supabase } from "./lib/initSupabase";
 import { UserProvider } from "./contexts/UserContext";
+import ChallengeDetails from "./src/ChallengeDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +74,7 @@ const App = () => {
           <Stack.Screen name="Programação Livre" component={FreeCode} />
           <Stack.Screen name="Controle Livre" component={FreeControl} />
           <Stack.Screen name="Conectar Robô" component={WifiSetting} />
+          <Stack.Screen name="Desafio" component={ChallengeDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
