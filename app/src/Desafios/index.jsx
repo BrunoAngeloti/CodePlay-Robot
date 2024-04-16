@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Container,
@@ -19,8 +19,11 @@ import {
 
 import { ScrollView } from "react-native";
 import { useUser } from "../../contexts/UserContext";
+import { supabase } from "../../lib/initSupabase";
 
 export const Challenges = () => {
+  const [challenges, setChallenges] = useState({ básico: [], intermediário: [], avançado: [] });
+
   const levels = [
     {
       label: "Básico",
@@ -36,11 +39,41 @@ export const Challenges = () => {
     },
   ];
 
-  const challenges = Array.from({ length: 14 }, (_, i) => i + 1);
+  const { user, selectedRobot } = useUser();
 
-  const { selectedRobot } = useUser();
-  
-  console.log(selectedRobot);
+  const checkIfChallengeIsDone = (challengeId) => {
+    return user?.completed_challenges?.find((challenge) => challenge === challengeId);
+  }
+
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      const { data, error } = await supabase
+        .from('challenges')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching challenges:', error);
+        return;
+      }
+
+      // Organize challenges by levels
+      const organizedChallenges = data.reduce((acc, challenge) => {
+        const levelKey = challenge.difficulty.toLowerCase(); // assuming the levels are in this format
+
+        if (acc[levelKey]) {
+          acc[levelKey].push(challenge);
+        } else {
+          acc[levelKey] = [challenge];
+        }
+        return acc;
+      }, { básico: [], intermediário: [], avançado: [] });
+
+      setChallenges(organizedChallenges);
+    };
+
+    fetchChallenges();
+  }, []);
 
   return (
     <Container>
@@ -63,15 +96,15 @@ export const Challenges = () => {
           <LevelSection key={index}>
             <LevelTitle>{level.label}</LevelTitle>
             <ChallengesRow>
-              {challenges.map((challenge, index) => (
+              {challenges[level.label.toLowerCase()].map((challenge, index) => (
                 <ChallengeButton
-                  key={challenge}
+                  key={challenge.id}
                   color={level.color}
-                  done={index === 0}
-                  onPress={() => console.log(`Play ${level} ${challenge}`)}
+                  done={checkIfChallengeIsDone(challenge.id)}
+                  onPress={() => console.log(`Play ${level.label} challenge name ${challenge.name}`)}
                 >
-                  <ChallengeText done={index === 0} color={level.color}>
-                    {challenge}
+                  <ChallengeText done={checkIfChallengeIsDone(challenge.id)} color={level.color}>
+                    {index + 1}
                   </ChallengeText>
                 </ChallengeButton>
               ))}

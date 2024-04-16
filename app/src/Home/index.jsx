@@ -52,7 +52,7 @@ const Home = () => {
         <Button
           title="Desafios"
           icon={<FontAwesome5 name="trophy" size={20} {...commonAttributes} />}
-          disabled={!selectedRobot}
+          //disabled={!selectedRobot}
         />
         <Button
           title="Programação Livre"
