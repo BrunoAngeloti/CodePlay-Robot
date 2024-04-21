@@ -19,6 +19,8 @@ export const ButtonPlus = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
 export const ButtonPlay = styled.TouchableOpacity`
@@ -31,4 +33,6 @@ export const ButtonPlay = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
