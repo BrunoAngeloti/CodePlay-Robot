@@ -20,9 +20,12 @@ import {
 import { ScrollView } from "react-native";
 import { useUser } from "../../contexts/UserContext";
 import { supabase } from "../../lib/initSupabase";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 export const Challenges = () => {
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
   const [challenges, setChallenges] = useState({ básico: [], intermediário: [], avançado: [] });
 
   const levels = [
@@ -40,9 +43,11 @@ export const Challenges = () => {
     },
   ];
 
-  const { user, selectedRobot } = useUser();
+  const { user, fetchUserDetails } = useUser();
 
-  const navigation = useNavigation();
+  useEffect(() => {
+    fetchUserDetails();
+  }, [isFocused]);
 
   const checkIfChallengeIsDone = (challengeId) => {
     return user?.completed_challenges?.find((challenge) => challenge === challengeId);

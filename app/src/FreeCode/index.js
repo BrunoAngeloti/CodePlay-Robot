@@ -11,6 +11,7 @@ import { useUser } from "../../contexts/UserContext";
 import socket from "../../services/socketio";
 import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../../lib/initSupabase";
+import { ResultModal } from "../../components/ResultModal";
 
 export const FreeCode = ({
   isChallenge,
@@ -172,42 +173,15 @@ export const FreeCode = ({
         onAddBlock={addBlockToList}
       />
 
-      <Modal
-        visible={
+      <ResultModal
+        isVisible={
           waitingResponse || (isChallenge && userAnswerValidate !== null)
         }
-      >
-        <View
-          style={{
-            backgroundColor: "white",
-            padding: 20,
-            borderRadius: 10,
-            alignItems: "center",
-          }}
-        >
-          {waitingResponse ? (
-            <>
-              <ActivityIndicator size="large" color="#0000ff" />
-              <Text>Executando...</Text>
-            </>
-          ) : isChallenge && userAnswerValidate !== null ? (
-            userAnswerValidate ? (
-              <>
-                <Text>Resposta correta!</Text>
-                <Button title="Voltar" onPress={() => navigation.goBack()} />
-              </>
-            ) : (
-              <>
-                <Text>Resposta incorreta!</Text>
-                <Button
-                  title="Continuar tentando"
-                  onPress={() => setUserAnswerValidate(null)}
-                />
-              </>
-            )
-          ) : null}
-        </View>
-      </Modal>
+        waitingResponse={waitingResponse}
+        isChallenge={isChallenge}
+        userAnswerValidate={userAnswerValidate}
+        onClose={() => setUserAnswerValidate(null)}
+      />
     </Container>
   );
 };
