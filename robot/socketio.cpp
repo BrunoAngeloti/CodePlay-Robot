@@ -40,6 +40,25 @@ void onConnected(){
   Serial.println(output);
 }
 
+void onFinishCommands(){
+    DynamicJsonDocument doc(256);
+    JsonArray array = doc.to<JsonArray>();
+
+    // Adicionar o nome do evento
+    array.add("finishCommands");
+
+    // Adicionar payload, se necessário
+    JsonObject payload = array.createNestedObject();
+    payload["espID"] = "1"; // Ou a ID real do seu dispositivo ESP
+
+    // Serializar e enviar
+    String output;
+    serializeJson(doc, output);
+    socket.sendEVENT(output);
+    Serial.println("Comandos finalizados enviados ao servidor.");
+}
+
+
 void processCommands(JsonArray commandsArray) {
     for (JsonObject command : commandsArray) {
         const char* commandId = command["id"];
@@ -97,6 +116,7 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length)
             if (eventName == "commands") {
               JsonArray commandsArray = array[1].as<JsonArray>();
               processCommands(commandsArray);
+              onFinishCommands();
             }
                  
             break;

@@ -35,7 +35,13 @@ const ChallengeDetails = ({ route }) => {
         />
       </Header>
       <BodyContainer>
-        <FreeCode isChallenge maxBlocks={challenge.max_blocks_number} answer={challenge.answer} />
+        <FreeCode 
+          isChallenge 
+          maxBlocks={challenge.max_blocks_number} 
+          answer={challenge.answer} 
+          score={challenge.points}
+          challengeID={challenge.id}
+        />
       </BodyContainer>
       <Modal
         visible={modalVisible}

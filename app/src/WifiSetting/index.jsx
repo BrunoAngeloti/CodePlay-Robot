@@ -28,6 +28,7 @@ export const WifiSetting = () => {
 
   const handleEspSelect = (espId) => {
     console.log(`Robô ${espId} selecionado`);
+    socket.emit('robotSelected', { espId });
     setSelectedRobot(espId);
   };
 

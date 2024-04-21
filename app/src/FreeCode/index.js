@@ -1,20 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import { Container, ButtonPlus, ButtonPlay } from "./styles";
-import { Text } from "react-native";
+import { ActivityIndicator, Button, Modal, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableBlocks from "../../components/DraggableBlocks";
 import BlockCatalog from "../../components/BlockCatalog";
 
 import { useUser } from "../../contexts/UserContext";
 import socket from "../../services/socketio";
+import { useNavigation } from "@react-navigation/native";
+import { supabase } from "../../lib/initSupabase";
 
-export const FreeCode = ({ isChallenge, maxBlocks, answer }) => {
+export const FreeCode = ({
+  isChallenge,
+  maxBlocks,
+  answer,
+  score,
+  challengeID,
+}) => {
   const [showCatalog, setShowCatalog] = useState(false);
   const [blocks, setBlocks] = useState([]);
   const [blockCounter, setBlockCounter] = useState(0);
-  const { selectedRobot } = useUser();
+  const { selectedRobot, user } = useUser();
+  const [waitingResponse, setWaitingResponse] = useState(false);
+  const [userAnswerValidate, setUserAnswerValidate] = useState(null);
+
+  const navigation = useNavigation(); // Use navigation hook
+
+  useEffect(() => {
+    socket.on("commandsCompleted", (data) => {
+      console.log("Comandos executados com sucesso:", data);
+      setWaitingResponse(false);
+    });
+
+    return () => socket.disconnect(); // Limpar na desmontagem
+  }, []);
 
   const handleArrayGenerated = (blocks) => {
     setBlocks(blocks);
@@ -61,9 +82,7 @@ export const FreeCode = ({ isChallenge, maxBlocks, answer }) => {
         userResponse.id !== correctResponse.id ||
         userResponse.data !== correctResponse.data
       ) {
-        console.log(
-          `Resposta incorreta no índice ${i}: Esperado ${correctResponse.id} com ${correctResponse.data}, recebido ${userResponse.id} com ${userResponse.data}`
-        );
+        console.log(`Resposta incorreta`);
         return false;
       }
     }
@@ -74,10 +93,47 @@ export const FreeCode = ({ isChallenge, maxBlocks, answer }) => {
   }
 
   const handleClickExecute = () => {
-    validateResponses(blocks, answer);
+    if (isChallenge) {
+      const answerValidate = validateResponses(blocks, answer);
+      setUserAnswerValidate(answerValidate);
+      if (answerValidate) {
+        updateUserScoreAndChallenges(score, challengeID);
+      }
+    }
 
-    //sendBlocksToServer();
+    sendBlocksToServer();
+
+    setWaitingResponse(true);
   };
+
+  async function updateUserScoreAndChallenges(pointsToAdd, challengeId) {
+    try {
+      // Obter o usuário atual
+      let { data, error } = await supabase
+        .from("users")
+        .select("score, completed_challenges")
+        .eq("id", user.id)
+        .single();
+
+      if (error) throw error;
+
+      // Preparar os novos valores
+      const newScore = data.score + pointsToAdd;
+      const newChallenges = [...(data.completed_challenges || []), challengeId];
+
+      // Atualizar o usuário
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({ score: newScore, completed_challenges: newChallenges })
+        .eq("id", user.id);
+
+      if (updateError) throw updateError;
+
+      console.log("Usuário atualizado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar usuário:", error.message);
+    }
+  }
 
   return (
     <Container>
@@ -115,6 +171,43 @@ export const FreeCode = ({ isChallenge, maxBlocks, answer }) => {
         onClose={() => setShowCatalog(false)}
         onAddBlock={addBlockToList}
       />
+
+      <Modal
+        visible={
+          waitingResponse || (isChallenge && userAnswerValidate !== null)
+        }
+      >
+        <View
+          style={{
+            backgroundColor: "white",
+            padding: 20,
+            borderRadius: 10,
+            alignItems: "center",
+          }}
+        >
+          {waitingResponse ? (
+            <>
+              <ActivityIndicator size="large" color="#0000ff" />
+              <Text>Executando...</Text>
+            </>
+          ) : isChallenge && userAnswerValidate !== null ? (
+            userAnswerValidate ? (
+              <>
+                <Text>Resposta correta!</Text>
+                <Button title="Voltar" onPress={() => navigation.goBack()} />
+              </>
+            ) : (
+              <>
+                <Text>Resposta incorreta!</Text>
+                <Button
+                  title="Continuar tentando"
+                  onPress={() => setUserAnswerValidate(null)}
+                />
+              </>
+            )
+          ) : null}
+        </View>
+      </Modal>
     </Container>
   );
 };

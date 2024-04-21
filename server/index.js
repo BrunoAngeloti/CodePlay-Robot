@@ -16,12 +16,36 @@ io.on("connection", (socket) => {
     socket.emit("espListResponse", espClients);
   });
 
+  socket.on("robotSelected", (data) => {
+    const { espId } = data;
+    console.log(`Robô ${espId} selecionado pelo usuário.`);
+    socket.join(espId);
+  });
+
   socket.on("registerESP", (data) => {
     const espId = data.espID;
     espClients[espId] = socket.id;
     console.log(`ESP ${espId} registrado com o socket ID ${socket.id}`);
 
     socket.emit("espRegistered", { espId, clientId: socket.id });
+  });
+
+  socket.on("finishCommands", (data) => {
+    const espId = data.espID;
+    const clientId = espClients[espId];
+
+    if (clientId) {
+      console.log(
+        `Notificando conclusão de comandos para o cliente com ID: ${clientId}`
+      );
+      io.to(clientId).emit("commandsCompleted", {
+        message: "Comandos finalizados.",
+      });
+    } else {
+      console.log(
+        `ESP ID ${espId} não encontrado ao tentar finalizar comandos.`
+      );
+    }
   });
 
   socket.on("data", (data) => {
