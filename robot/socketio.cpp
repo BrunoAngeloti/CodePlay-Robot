@@ -85,6 +85,7 @@ void processCommands(JsonArray commandsArray) {
 
         } else if (strcmp(commandId, "repeat") == 0) {
            repeatCommands(atoi(data));
+           continue;
 
         } else {
             Serial.println("Comando desconhecido");

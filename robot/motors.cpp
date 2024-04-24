@@ -131,10 +131,6 @@ float getDistance() {
   // Calculate the distance
   distanceCm = duration * SOUND_VELOCITY/2;
   
-  // Prints the distance on the Serial Monitor
-  Serial.print("Distance (cm): ");
-  Serial.println(distanceCm);
-
   return(distanceCm);
 }
 

@@ -2,23 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 import { Container, ButtonPlus, ButtonPlay } from "./styles";
-import { ActivityIndicator, Button, Modal, Text, View } from "react-native";
+import { Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableBlocks from "../../components/DraggableBlocks";
 import BlockCatalog from "../../components/BlockCatalog";
 
 import { useUser } from "../../contexts/UserContext";
 import socket from "../../services/socketio";
-import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../../lib/initSupabase";
 import { ResultModal } from "../../components/ResultModal";
 
 export const FreeCode = ({
-  isChallenge,
-  maxBlocks,
-  answer,
-  score,
-  challengeID,
+  isChallenge = false,
+  maxBlocks = 1000,
+  answer = [],
+  score = 0,
+  challengeID = null,
 }) => {
   const [showCatalog, setShowCatalog] = useState(false);
   const [blocks, setBlocks] = useState([]);
@@ -26,8 +25,6 @@ export const FreeCode = ({
   const { selectedRobot, user } = useUser();
   const [waitingResponse, setWaitingResponse] = useState(false);
   const [userAnswerValidate, setUserAnswerValidate] = useState(null);
-
-  const navigation = useNavigation(); // Use navigation hook
 
   useEffect(() => {
     socket.on("commandsCompleted", (data) => {
