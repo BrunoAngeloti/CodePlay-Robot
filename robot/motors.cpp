@@ -1,5 +1,8 @@
 #include "motors.h"
 
+#define TRIG_PIN 6  // Exemplo de pinos GPIO, ajuste para sua configuração
+#define ECHO_PIN 7
+
 void init_motors(){
  pinMode(motorA1, OUTPUT);
  pinMode(motorA2, OUTPUT);
@@ -100,4 +103,34 @@ void waitForSeconds(int second){
   int timeToWait = second * 1000;
   stopMotors();
   delay(timeToWait);
+}
+
+void setupUltrasonic() {
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+}
+
+float getDistance() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  
+  float duration = pulseIn(ECHO_PIN, HIGH);
+  float distance = duration * 0.034 / 2; // Velocidade do som em cm/us dividido por 2 (ida e volta)
+  Serial.println(distance);
+  return distance;
+}
+
+void moveForwardUntilObstacle(float maxDistance) {
+  while (true) {
+    float distance = getDistance();
+    Serial.println(distance);
+    if (distance <= maxDistance || distance == 0) {
+      stopMotors();
+      break;
+    }
+    moveForward();
+  }
 }

@@ -16,6 +16,7 @@ void loop()
 {
   connection_socket();
   checkButton(); 
+  getDistance();
   
   if(WiFi.status() != WL_CONNECTED) {
     Serial.println("Desconectado do WiFi, tentando reconectar...");

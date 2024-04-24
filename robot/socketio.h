@@ -13,6 +13,7 @@ void processCommands(JsonArray commandsArray);
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length);
 void onConnected();
 void onFinishCommands();
+void repeatCommands(int repeatCount);
 
 
 #endif

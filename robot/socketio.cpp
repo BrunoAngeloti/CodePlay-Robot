@@ -4,6 +4,8 @@
 #include <ArduinoJson.h>
 
 SocketIOclient socket;
+DynamicJsonDocument doc(2048);
+JsonArray commandHistory = doc.to<JsonArray>();
 
 // inicializa o socket.io-client
 void init_socket()
@@ -58,7 +60,6 @@ void onFinishCommands(){
     Serial.println("Comandos finalizados enviados ao servidor.");
 }
 
-
 void processCommands(JsonArray commandsArray) {
     for (JsonObject command : commandsArray) {
         const char* commandId = command["id"];
@@ -79,8 +80,57 @@ void processCommands(JsonArray commandsArray) {
         } else if (strcmp(commandId, "wait") == 0) {
            waitForSeconds(atoi(data));
            
+        } else if (strcmp(commandId, "distance") == 0) {
+           moveForwardUntilObstacle(atoi(data));
+
+        } else if (strcmp(commandId, "repeat") == 0) {
+           repeatCommands(atoi(data));
+
         } else {
             Serial.println("Comando desconhecido");
+        }
+
+        JsonObject newCommand = commandHistory.createNestedObject();
+        newCommand["id"] = commandId;
+        newCommand["data"] = data;
+    }
+    commandHistory.clear();
+}
+
+void repeatCommands(int repeatCount) {
+    String output;
+    serializeJson(commandHistory, output);
+    Serial.println(output);
+    
+    for (int i = 0; i < repeatCount; i++) {
+        for (JsonObject command : commandHistory) {
+            const char* commandId = command["id"];
+            const char* data = command["data"];
+
+            if (strcmp(commandId, "move_forward") == 0) {
+                moveForwardCentimeters(atoi(data));
+                
+            } else if (strcmp(commandId, "move_back") == 0) {
+                moveBackwardCentimeters(atoi(data));
+                
+            } else if (strcmp(commandId, "move_right") == 0) {
+               moveRightDegrees(atoi(data));
+
+            } else if (strcmp(commandId, "move_left") == 0) {
+               moveLeftDegrees(atoi(data));
+               
+            } else if (strcmp(commandId, "wait") == 0) {
+               waitForSeconds(atoi(data));
+               
+            } else if (strcmp(commandId, "distance") == 0) {
+               moveForwardUntilObstacle(atoi(data));
+
+            } else if (strcmp(commandId, "repeat") == 0) {
+               repeatCommands(atoi(data));
+
+            } else {
+                Serial.println("Comando desconhecido");
+            }
         }
     }
 }
@@ -93,9 +143,9 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length)
         case sIOtype_CONNECT:
             Serial.printf("[IOc] Connected to url: %s\n", payload);
             
-            // join default namespace (no auto join in Socket.IO V3)
             socket.send(sIOtype_CONNECT, "/");
             onConnected();
+
             break;
         case sIOtype_EVENT: {
             Serial.printf("[IOc] get event: %s\n", payload);
