@@ -10,13 +10,13 @@ void setup()
   init_wifi();
   init_motors();
   init_socket();
+  init_ultrasonic();
 }
 
 void loop()
 {
   connection_socket();
   checkButton(); 
-  getDistance();
   
   if(WiFi.status() != WL_CONNECTED) {
     Serial.println("Desconectado do WiFi, tentando reconectar...");

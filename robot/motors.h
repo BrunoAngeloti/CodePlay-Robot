@@ -22,7 +22,7 @@ void moveRightDegrees(int deg);
 void moveLeftDegrees(int deg);
 void waitForSeconds(int second);
 
-void setupUltrasonic();
+void init_ultrasonic();
 float getDistance();
 void moveForwardUntilObstacle(float maxDistance);
 

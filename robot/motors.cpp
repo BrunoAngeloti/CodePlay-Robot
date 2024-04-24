@@ -1,7 +1,14 @@
 #include "motors.h"
 
-#define TRIG_PIN 6  // Exemplo de pinos GPIO, ajuste para sua configuração
-#define ECHO_PIN 7
+const int trigPin = 12;
+const int echoPin = 14;
+
+//define sound velocity in cm/uS
+#define SOUND_VELOCITY 0.034
+#define CM_TO_INCH 0.393701
+
+long duration;
+float distanceCm;
 
 void init_motors(){
  pinMode(motorA1, OUTPUT);
@@ -105,22 +112,30 @@ void waitForSeconds(int second){
   delay(timeToWait);
 }
 
-void setupUltrasonic() {
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(ECHO_PIN, INPUT);
+void init_ultrasonic(){
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 }
 
 float getDistance() {
-  digitalWrite(TRIG_PIN, LOW);
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
-  digitalWrite(TRIG_PIN, HIGH);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(TRIG_PIN, LOW);
+  digitalWrite(trigPin, LOW);
   
-  float duration = pulseIn(ECHO_PIN, HIGH);
-  float distance = duration * 0.034 / 2; // Velocidade do som em cm/us dividido por 2 (ida e volta)
-  Serial.println(distance);
-  return distance;
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  
+  // Calculate the distance
+  distanceCm = duration * SOUND_VELOCITY/2;
+  
+  // Prints the distance on the Serial Monitor
+  Serial.print("Distance (cm): ");
+  Serial.println(distanceCm);
+
+  return(distanceCm);
 }
 
 void moveForwardUntilObstacle(float maxDistance) {
