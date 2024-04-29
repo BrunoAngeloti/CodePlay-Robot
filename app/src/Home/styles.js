@@ -45,8 +45,8 @@ export const ButtonText = styled.Text`
 `;
 
 export const Robot = styled.Image`
-  width: 220px;
-  height: 250px;
+  width: 180px;
+  height: 200px;
   position: relative;
   margin-top: auto;
   margin-left: auto;
